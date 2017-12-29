@@ -17,6 +17,9 @@ option_list <- list (
   make_option( c ("-d", "--useDataset"), default = "hsapiens_gene_ensembl",
                help = "The BioMart dataset [default = %default]." ),
   
+  make_option( c ("--host"), default = "aug2017.archive.ensembl.org",
+               help = "The host to be used for useMart [default = %default]." ),
+  
   make_option( c ("-f", "--filters"), default = "",
                help = "The filters to apply. E.g.: \"c(\"ensembl_gene_id\")\". If more than one filter is present, it must be provided in form of a vector" ),
   
@@ -113,7 +116,7 @@ suppressPackageStartupMessages(library("biomaRt"))
 #********
 
 my.mart <- useDataset( opt$useDataset, 
-                       useMart(opt$useMart, host = "aug2017.archive.ensembl.org") )
+                       useMart(opt$useMart, host = opt$host) )
 
 my.list <- getBM( filters = my.filters, 
                   attributes = my.attributes,
