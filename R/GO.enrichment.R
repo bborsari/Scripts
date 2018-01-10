@@ -34,7 +34,10 @@ option_list <- list (
                help = "The pseudocount to use for the barplot [default = %default]." ),
   
   make_option( c ("-f", "--fdr_cutoff"), type = "numeric", default = 0.05,
-               help = "The fdr cutoff to apply [default = %default]." )
+               help = "The fdr cutoff to apply [default = %default]." ),
+  
+  make_option( c ("-t", "--title"), default = NULL,
+               help = "The title for the barplot [default = %default]." )
 
 )
 
@@ -199,7 +202,13 @@ if (length(rownames(sub.df)) > 0) {
           axis.title = element_text(size=15)) +
     coord_flip() +
     ylab("-log10(fdr)") +
-    xlab(paste0("GO terms - ", opt$category)) 
+    xlab(paste0("GO terms - ", opt$category))
+  
+  if ( ! is.null(opt$title) ) {
+    
+    p <- p + labs(title = opt$title)
+    
+  }
   
 } else {
   
