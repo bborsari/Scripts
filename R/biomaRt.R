@@ -17,7 +17,7 @@ option_list <- list (
   make_option( c ("-d", "--useDataset"), default = "hsapiens_gene_ensembl",
                help = "The BioMart dataset [default = %default]." ),
   
-  make_option( c ("--host"), default = "aug2017.archive.ensembl.org",
+  make_option( c ("--host"), default = "www.ensembl.org",
                help = "The host to be used for useMart [default = %default]." ),
   
   make_option( c ("-f", "--filters"), default = "",
@@ -115,8 +115,27 @@ suppressPackageStartupMessages(library("biomaRt"))
 # BEGIN *
 #********
 
-my.mart <- useDataset( opt$useDataset, 
-                       useMart(opt$useMart, host = opt$host) )
+i <- 1
+computed <- FALSE
+my.mart <- NULL
+
+while(computed == FALSE & i < 100){
+
+  x <- tryCatch({
+    my.mart <<- useDataset( opt$useDataset,
+                useMart(opt$useMart, host = opt$host, verbose = F) )
+    computed <- TRUE
+    #cat("Retrieved on attempt", i, "\n")
+  }, error = function(e){
+    #cat("Could not connect... Retry", i, "/100...\n")
+    Sys.sleep(3)
+  })
+  i <- i+1
+}
+
+
+# my.mart <- useDataset( opt$useDataset, 
+#                        useMart(opt$useMart, host = opt$host, verbose = T) )
 
 my.list <- getBM( filters = my.filters, 
                   attributes = my.attributes,
