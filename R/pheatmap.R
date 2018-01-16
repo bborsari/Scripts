@@ -1,7 +1,6 @@
 #!/usr/bin/env Rscript
 
 
-
 #*****************
 # OPTION PARSING *
 #*****************
@@ -269,7 +268,7 @@ if ( opt$by_row_hc ) {
 
 
 # hierarchical clustering by cols
-if ( ! opt$by_col_hc ) {
+if ( opt$by_col_hc ) {
 
   # clustering_distance_cols
   my.clustering_distance_cols <- opt$by_col_distance
@@ -424,6 +423,7 @@ if ( !is.null(opt$height) ){
 
 my.legend = FALSE
 my.annotation_legend = FALSE
+
 
 
 my.plot.list <- list()
