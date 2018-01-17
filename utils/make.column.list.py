@@ -33,4 +33,4 @@ for line in open_input.readlines():
 
 for key in d.keys():
 	col = ";".join(d[key])
-print key, "\t", col
+	print key, "\t", col
