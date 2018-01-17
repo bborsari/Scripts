@@ -123,11 +123,11 @@ option_list <- list(
   make_option( c("--show_matrix_values"), default = FALSE,
                help = "Whether to show the numeric values within the cells [default = %default]." ),
   
-  make_option( c("--width"), default = NULL,
-               help = "Width of each single heatmap [default = %default]." ),
+  make_option( c("--width"), default = NULL, type = 'numeric',
+               help = "Cell width [default = %default]." ),
   
-  make_option( c("--height"), default = NULL,
-               help = "Height of each single heatmap [default = %default]." ),
+  make_option( c("--height"), default = NULL, type = 'numeric',
+               help = "Cell height [default = %default]." ),
   
   make_option( c("--fontsize"), default = 10,
                help = "Fontsize of the plot [default = %default].")
@@ -486,8 +486,8 @@ if ( opt$no_hc ) {
                                  labels_col = my.labels_col,
                                  fontsize = opt$fontsize,
                                  main = "Metadata row order",
-                                 width = my.width,
-                                 height = my.height,
+                                 cellwidth = my.width,
+                                 cellheight = my.height,
                                  display_numbers = my.display_numbers )$gtable
   i <- i+1
 }
@@ -542,8 +542,8 @@ if ( opt$by_row_hc ) {
                                   main = paste0( "Hierarchical clustering by rows - ",
                                                  my.clustering_distance_rows,
                                                  " distance"),
-                                  width = my.width,
-                                  height = my.height,
+                                  cellwidth = my.width,
+                                  cellheight = my.height,
                                   display_numbers = my.display_numbers )
   
   my.plot.list[[i]] <- my.by.row.pheatmap$gtable
@@ -610,8 +610,8 @@ if ( opt$by_col_hc ) {
                                   main = paste0( "Hierarchical clustering by columns - ",
                                                  my.clustering_distance_cols,
                                                  " distance"),
-                                  width = my.width,
-                                  height = my.height,
+                                  cellwidth = my.width,
+                                  cellheight = my.height,
                                   display_numbers = my.display_numbers )
   
   my.plot.list[[i]] <- my.by.col.pheatmap$gtable
@@ -673,8 +673,8 @@ if ( opt$joint_hc ) {
                                                 my.clustering_distance_rows, " & ",
                                                 my.clustering_distance_cols,
                                                 " distances"),
-                                 width = my.width,
-                                 height = my.height,
+                                 cellwidth = my.width,
+                                 cellheight = my.height,
                                  display_numbers = my.display_numbers )
   
   my.plot.list[[i]] <- my.joint.pheatmap$gtable
