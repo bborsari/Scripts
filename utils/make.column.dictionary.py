@@ -28,10 +28,12 @@ open_input = sys.stdin if options.input == "stdin" else open(options.input)
 d={}
 for line in open_input.readlines():
 	name, val = line.strip().split('\t')
-	d[name] = d.get(name, [])
-	d[name].append(val)
+	d[name] = d.get(name, {})
+	d[name][val] = d[name].get(val, 0) +1
 
 for key in d.keys():
-	mylist = list(set(d[key]))
-	col = ";".join(mylist)
-	print key, "\t", col
+	mylist = []
+	for name in d[key].keys():
+		mystring = ":".join([name, str(d[key][name])])
+		mylist.append(mystring)
+	print key, "\t", ";".join(mylist)
