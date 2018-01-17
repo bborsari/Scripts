@@ -81,7 +81,7 @@ option_list <- list(
   make_option( c( "--title", "-t" ), default = NULL,
                help = "The title of the plot [default = %default]."),
   
-  make_option( c( "--palette", "-p" ), default = NULL,
+  make_option( c( "--palette_file", "-p" ), default = NULL,
                help = "File with first column as matrix palette [default = %default]."),
   
   make_option( c( "--palette_breaks" ), default = NULL,
@@ -158,7 +158,6 @@ suppressPackageStartupMessages(library(RColorBrewer))
 #***************
 
 
-
 # read input matrix
 if ( ! is.null(opt$input) ) {
   
@@ -214,6 +213,7 @@ if ( ! is.null(opt$row_metadata) ) {
 }
 
 
+
 # read col metadata
 if ( ! is.null(opt$col_metadata) ) {
   
@@ -259,7 +259,7 @@ my.clustering_method_cols <- opt$by_col_method
 
 
 # hierarchical clustering by rows
-if ( opt$by_row_hc ) {
+if ( opt$by_row_hc | opt$joint_hc ) {
   
   # clustering_distance_rows
   my.clustering_distance_rows <- opt$by_row_distance 
@@ -268,7 +268,7 @@ if ( opt$by_row_hc ) {
 
 
 # hierarchical clustering by cols
-if ( opt$by_col_hc ) {
+if ( opt$by_col_hc | opt$joint_hc ) {
 
   # clustering_distance_cols
   my.clustering_distance_cols <- opt$by_col_distance
@@ -278,20 +278,20 @@ if ( opt$by_col_hc ) {
 
 
 # read palette
-if ( !is.null(opt$palette) ) {
-  
-  my.color <- as.character( read.table( file = opt$palette, comment.char='%' )$V1 )
-  
+if ( !is.null(opt$palette_file) ) {
+
+  my.color <- as.character( read.table( file = opt$palette_file, comment.char='%' )$V1 )
+
 } else {
-  
+
   my.color <- colorRampPalette( rev( brewer.pal( n = 7, name = "RdYlBu" ) ) )(100)
-  
+
 }
 
 
 
-
 # palette breaks
+
 if ( !is.null(opt$palette_breaks) ) {
   
   opt$palette_breaks <- gsub( "\\", "", opt$palette_breaks, fixed = TRUE )
@@ -345,7 +345,7 @@ if ( !is.null(opt$col_labels) ) {
 if ( !is.null(opt$legend_breakpoints) ) {
   
   opt$legend_breakpoints <- gsub( "\\", "", opt$legend_breakpoints, fixed = TRUE )
-  my.legend_breaks <- as.numeric( strsplit( opt$my.legend_breaks, "," )[[1]] )
+  my.legend_breaks <- as.numeric( strsplit( opt$legend_breakpoints, "," )[[1]] )
   
 } else {
   
@@ -358,7 +358,7 @@ if ( !is.null(opt$legend_breakpoints) ) {
 if ( !is.null(opt$legend_labels) ) {
   
   opt$legend_labels <- gsub( "\\", "", opt$legend_labels, fixed = TRUE )
-  my.legend_labels <- as.numeric( strsplit( opt$my.legend_labels, "," )[[1]] )
+  my.legend_labels <- as.numeric( strsplit( opt$legend_labels, "," )[[1]] )
   
 } else {
   
@@ -670,8 +670,9 @@ if ( opt$joint_hc ) {
                                  labels_col = my.labels_col,
                                  fontsize = opt$fontsize,
                                  main = paste0( "Hierarchical clustering by rows & columns - ",
-                                                my.clustering_distance_joint,
-                                                " distance"),
+                                                my.clustering_distance_rows, " & ",
+                                                my.clustering_distance_cols,
+                                                " distances"),
                                  width = my.width,
                                  height = my.height,
                                  display_numbers = my.display_numbers )
