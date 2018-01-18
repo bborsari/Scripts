@@ -30,14 +30,17 @@ option_list <- list (
   make_option( c ("-d", "--directory"), default="./", 
                help = "Directory for the output [default = %default]."),
   
-  make_option( c ("-p", "--pseudocount"), type = "numeric", default = 1e-4,
+  make_option( c ("-p", "--pseudocount"), type = "numeric", default = 1e-300,
                help = "The pseudocount to use for the barplot [default = %default]." ),
   
   make_option( c ("-f", "--fdr_cutoff"), type = "numeric", default = 0.05,
                help = "The fdr cutoff to apply [default = %default]." ),
   
   make_option( c ("-t", "--title"), default = NULL,
-               help = "The title for the barplot [default = %default]." )
+               help = "The title for the barplot [default = %default]."),
+               
+  make_option( c("--textsize"), default = 15, type = 'numeric',
+               help = "Size of plot text [default = %default]." )
 
 )
 
@@ -190,15 +193,16 @@ df$fdr = p.adjust(df$Pvalue, method = "BH")
 sub.df <- df[df$fdr < opt$fdr_cutoff, ]
 
 if (length(rownames(sub.df)) > 0) {
-  
-  p <- ggplot(sub.df, aes(x=Term, y=-log10(fdr + opt$pseudocount))) +
+  aes(x= reorder(cat,-num),num)
+  p <- ggplot(sub.df,
+              aes(x=reorder(Term, -log10(fdr + opt$pseudocount)), y=-log10(fdr + opt$pseudocount))) +
     geom_bar(stat="identity", fill="orange", colour="black") +
     theme(panel.grid.major = element_blank(), 
           panel.grid.minor = element_blank(),
           panel.background = element_blank(), 
           axis.line = element_line(colour = "black"),
           plot.title = element_text(hjust = 0.5, size=15),
-          axis.text = element_text(size=15),
+          axis.text = element_text(size=opt$textsize),
           axis.title = element_text(size=15)) +
     coord_flip() +
     ylab("-log10(fdr)") +
