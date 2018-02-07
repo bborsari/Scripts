@@ -6,7 +6,7 @@ import sys, ast, getopt, types
 
 def main(argv):
     arg_dict={}
-    switches=['mark', 'sample', 'db', 'Loci', 'Method', 'log', 'window', 'type', 'rep1', 'Rep2']
+    switches=['mark', 'sample', 'db', 'Loci', 'Method', 'log', 'window', 'type', 'rep1', 'Rep2', 'outFolder']
     singles=''.join([x[0]+':' for x in switches])
     long_form=[x+'=' for x in switches]
     d={x[0]+':':'--'+x for x in switches}
@@ -46,7 +46,7 @@ def main(argv):
 			for j in range(0, len(arg_dict['window'])):
 				for M in arg_dict['Method']:
 					for l in arg_dict['log']:
-						out="".join((s, m, ".", d.split("/")[-1], ".", arg_dict['window'][j], ".", M, ".", l, ".correlation.tsv"))
+						out="".join((arg_dict['outFolder'][0], "/", s, m, ".", d.split("/")[-1], ".", arg_dict['window'][j], ".", M, ".", l, ".correlation.tsv"))
 						options="\t".join((m, s, d, arg_dict['Loci'][j], M, l, arg_dict['window'][j], arg_dict['type'], rep1, Rep2, out))
 						print options
 
