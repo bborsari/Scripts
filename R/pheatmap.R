@@ -130,7 +130,10 @@ option_list <- list(
                help = "Cell height [default = %default]." ),
   
   make_option( c("--fontsize"), default = 10,
-               help = "Fontsize of the plot [default = %default].")
+               help = "Fontsize of the plot [default = %default]."),
+  
+  make_option( c("--rotate_colnames"), default = FALSE,
+               help = "Rotate column names diagonally [default = %default].")
 )
 
 parser <- OptionParser(
@@ -151,6 +154,32 @@ suppressPackageStartupMessages(library(ggplot2))
 suppressPackageStartupMessages(library(cowplot))
 suppressPackageStartupMessages(library(pheatmap))
 suppressPackageStartupMessages(library(RColorBrewer))
+suppressPackageStartupMessages(library(grid))
+
+
+#************
+# FUNCTIONS *
+#************
+
+draw_colnames_45 <- function (coln, ...) {
+  m = length(coln)
+  x = (1:m)/m - 1/2/m
+  grid.text(coln, x = x, y = unit(0.96, "npc"), vjust = .5, 
+            hjust = 1, rot = 45, gp = gpar(...)) ## Was 'hjust=0' and 'rot=270'
+}
+
+draw_colnames_45 <- function (coln, gaps, ...) {
+  coord = pheatmap:::find_coordinates(length(coln), gaps)
+  x = coord$coord - 0.5 * coord$size
+  res = textGrob(coln, x = x, y = unit(1, "npc") - unit(3,"bigpts"), vjust = 0.5, hjust = 1, rot = 45, gp = gpar(...))
+  return(res)}
+
+if (opt$rotate_colnames) {
+  
+  assignInNamespace(x="draw_colnames", value="draw_colnames_45", ns=asNamespace("pheatmap"))
+  
+}
+
 
 
 #***************
