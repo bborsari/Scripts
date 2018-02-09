@@ -193,7 +193,6 @@ df$fdr = p.adjust(df$Pvalue, method = "BH")
 sub.df <- df[df$fdr < opt$fdr_cutoff, ]
 
 if (length(rownames(sub.df)) > 0) {
-  aes(x= reorder(cat,-num),num)
   p <- ggplot(sub.df,
               aes(x=reorder(Term, -log10(fdr + opt$pseudocount)), y=-log10(fdr + opt$pseudocount))) +
     geom_bar(stat="identity", fill="orange", colour="black") +
