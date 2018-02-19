@@ -1,0 +1,3 @@
+# usage of list.options.py when to provide manually the rep ID
+
+list.options.py --mark '["H3K4me3"]' --sample '["H000", "H003"]' --db '["/no_backup/rg/bborsari/human_chipseq_QC/2017-05-05.chipseq-pipeline.no-shift.db", "/no_backup/rg/bborsari/human_chipseq_QC/2017-06-07.chipseq-pipeline.no-shift.fragLen250.db", "/no_backup/rg/bborsari/human_chipseq_QC/2017-05-08.chipseq-pipeline.shift.fragLen200.db", "/no_backup/rg/bborsari/human_chipseq_QC/2017-05-10.chipseq-pipeline.shift.fragLen300.db"]' --Loci '["chr1.500.bed", "chr1.1000.bed", "chr1.2000.bed"]' --Method '["pearson", "spearman"]' --log '["yes", "no"]' --window '["500", "1000", "2000"]' --rep1 '{("H000", "H3K4me3"): "H000_H3K4me3X1", ("H003", "H3K4me3"): "H003_H3K4me3X1"}'
