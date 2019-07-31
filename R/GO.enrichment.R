@@ -192,26 +192,68 @@ df$fdr = p.adjust(df$Pvalue, method = "BH")
 
 sub.df <- df[df$fdr < opt$fdr_cutoff, ]
 
-if (length(rownames(sub.df)) > 0) {
-  p <- ggplot(sub.df,
-              aes(x=reorder(Term, -log10(fdr + opt$pseudocount)), y=-log10(fdr + opt$pseudocount))) +
-    geom_bar(stat="identity", fill="orange", colour="black") +
-    theme(panel.grid.major = element_blank(), 
-          panel.grid.minor = element_blank(),
-          panel.background = element_blank(), 
-          axis.line = element_line(colour = "black"),
-          plot.title = element_text(hjust = 0.5, size=15),
-          axis.text = element_text(size=opt$textsize),
-          axis.title = element_text(size=15)) +
-    coord_flip() +
-    ylab("-log10(fdr)") +
-    xlab(paste0("GO terms - ", opt$category))
+if (nrow(sub.df) > 0) {
   
-  if ( ! is.null(opt$title) ) {
+  if (nrow(sub.df) <= 20) {
     
-    p <- p + labs(title = opt$title)
+    p <- ggplot(sub.df,
+                aes(x=reorder(Term, -log10(fdr + opt$pseudocount)), y=-log10(fdr + opt$pseudocount))) +
+      geom_bar(stat="identity", fill="orange", colour="black") +
+      theme(panel.grid.major = element_blank(), 
+            panel.grid.minor = element_blank(),
+            panel.background = element_blank(), 
+            axis.line = element_line(colour = "black"),
+            plot.title = element_text(hjust = 0.5, size=15),
+            axis.text = element_text(size=opt$textsize),
+            axis.title = element_text(size=15)) +
+      coord_flip() +
+      ylab("-log10(fdr)") +
+      xlab(paste0("GO terms - ", opt$category))
+    
+    if ( ! is.null(opt$title) ) {
+      
+      p <- p + labs(title = opt$title)
+      
+    }
+    
+  } else {
+    
+    x <- 1:nrow(sub.df)
+    sub.df$facet <- ceiling(x/20)
+    my.n <- max(as.numeric(sub.df$facet))
+    p <- list()
+    
+    for (i in 1:my.n) {
+      
+      p[[i]] <- ggplot(sub.df[sub.df$facet == i, ],
+                         aes(x=reorder(Term, -log10(fdr + opt$pseudocount)), y=-log10(fdr + opt$pseudocount))) +
+        geom_bar(stat="identity", fill="orange", colour="black") +
+        theme(panel.grid.major = element_blank(), 
+              panel.grid.minor = element_blank(),
+              panel.background = element_blank(), 
+              axis.line = element_line(colour = "black"),
+              plot.title = element_text(hjust = 0.5, size=15),
+              axis.text = element_text(size=opt$textsize),
+              axis.title = element_text(size=15)) +
+        coord_flip() +
+        ylab("-log10(fdr)") +
+        xlab(paste0("GO terms - ", opt$category))
+      
+      if ( ! is.null(opt$title) ) {
+        
+        p[[i]] <- p[[i]] + labs(title = opt$title)
+        
+      }
+      
+      
+      
+    }
+    
+    
     
   }
+  
+
   
 } else {
   
@@ -230,9 +272,16 @@ htmlReport(res, file=sprintf("%s.html", output))
 if (! is.null(p)) {
   
   pdf(file = sprintf("%s.pdf", output), paper="a4r", width=32, height=14)
-  print(p)
+  if (nrow(sub.df) <= 20) {
+    print(p)
+  } else {
+    for (i in 1:my.n) {
+      print(p[i])
+      
+    }
+    
+  }
   dev.off()
-  
 }
 
 

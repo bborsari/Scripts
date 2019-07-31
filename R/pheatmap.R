@@ -517,7 +517,8 @@ if ( opt$no_hc ) {
                                  main = "Metadata row order",
                                  cellwidth = my.width,
                                  cellheight = my.height,
-                                 display_numbers = my.display_numbers )$gtable
+                                 display_numbers = my.display_numbers,
+                                 border_color = F)$gtable
   i <- i+1
 }
 
@@ -573,7 +574,8 @@ if ( opt$by_row_hc ) {
                                                  " distance"),
                                   cellwidth = my.width,
                                   cellheight = my.height,
-                                  display_numbers = my.display_numbers )
+                                  display_numbers = my.display_numbers,
+                                  border_color = F)
   
   my.plot.list[[i]] <- my.by.row.pheatmap$gtable
   
@@ -641,7 +643,8 @@ if ( opt$by_col_hc ) {
                                                  " distance"),
                                   cellwidth = my.width,
                                   cellheight = my.height,
-                                  display_numbers = my.display_numbers )
+                                  display_numbers = my.display_numbers,
+                                  border_color = F)
   
   my.plot.list[[i]] <- my.by.col.pheatmap$gtable
   
@@ -704,7 +707,8 @@ if ( opt$joint_hc ) {
                                                 " distances"),
                                  cellwidth = my.width,
                                  cellheight = my.height,
-                                 display_numbers = my.display_numbers )
+                                 display_numbers = my.display_numbers,
+                                 border_color = F)
   
   my.plot.list[[i]] <- my.joint.pheatmap$gtable
   
